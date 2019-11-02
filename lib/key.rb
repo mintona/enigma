@@ -2,6 +2,7 @@ class Key
   attr_reader :a_key, :b_key, :c_key, :d_key
 
   def initialize
+    #do we want to do all this at initialization?
     @a_key = nil
     @b_key = nil
     @c_key = nil
