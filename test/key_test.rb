@@ -11,23 +11,23 @@ class KeyTest < Minitest::Test
     assert_instance_of Key, @key
   end
 
-  def test_it_has_attributes
-    assert_nil @key.a_key
-    assert_nil @key.b_key
-    assert_nil @key.c_key
-    assert_nil @key.d_key
-  end
+  # def test_it_has_attributes
+  #   assert_nil @key.a_key
+  #   assert_nil @key.b_key
+  #   assert_nil @key.c_key
+  #   assert_nil @key.d_key
+  # end
 
   def test_it_can_generate_random_five_digit_number
-    number1 = @key.generate_number
+    number1 = Key.generate_number
 
     assert_equal 5, number1.length
 
-    number2 = @key.generate_number
+    number2 = Key.generate_number
 
     assert_equal 5, number2.length
 
-    number3 = @key.generate_number
+    number3 = Key.generate_number
 
     assert_equal 5, number3.length
 
@@ -37,14 +37,23 @@ class KeyTest < Minitest::Test
     assert_equal true, expected
   end
 
-  def test_it_can_set_the_keys
-    @key.expects(:generate_number).returns("12345")
-    @key.set_keys
+  def test_it_can_start_with_zero
+    Key.expects(:rand).returns(1234)
 
-    assert_equal '12', @key.a_key
-    assert_equal '23', @key.b_key
-    assert_equal '34', @key.c_key
-    assert_equal '45', @key.d_key
+    assert_equal "01234", Key.generate_number
+
+    Key.expects(:rand).returns(234)
+
+    assert_equal "00234", Key.generate_number
   end
+  # def test_it_can_set_the_keys
+  #   @key.expects(:generate_number).returns("12345")
+  #   @key.set_keys
+  #
+  #   assert_equal '12', @key.a_key
+  #   assert_equal '23', @key.b_key
+  #   assert_equal '34', @key.c_key
+  #   assert_equal '45', @key.d_key
+  # end
 
 end
