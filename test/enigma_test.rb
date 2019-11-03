@@ -1,5 +1,6 @@
 require './test/test_helper'
-require './lib/enigma'
+require_relative '../lib/enigma'
+require_relative '../lib/shift'
 
 class EnigmaTest < Minitest::Test
   def setup
@@ -21,7 +22,7 @@ class EnigmaTest < Minitest::Test
     assert_nil @enigma.shift
   end
 
-  def test_it_can_get_shift_with_key_and_date
+  def test_it_can_create_shift_with_key_and_date
 
     @enigma.create_shift("02715", "040895")
 
@@ -31,19 +32,16 @@ class EnigmaTest < Minitest::Test
     assert_equal 20, @enigma.shift.d_shift
   end
 
-
-
   def test_it_can_shift_characters
-    skip
-    assert_equal '', @enigma.shift_message("Lets TRY this AGAIN!!")
+
+    @enigma.create_shift("02715", "040895")
+
+    assert_equal 'keder ohulw', @enigma.shift_message("hello world")
+    assert_equal 'keder ohulw', @enigma.shift_message("HELLO WORLD")
+    assert_equal 'keder ohulw!', @enigma.shift_message("hello world!")
   end
 
   def test_it_can_encrypt_a_message
-    @enigma.expects(:shift.a_shift).returns(3)
-    @enigma.expects(:shift.b_shift).returns(27)
-    @enigma.expects(:shift.c_shift).returns(73)
-    @enigma.expects(:shift.d_shift).returns(20)
-    require "pry"; binding.pry
     expected = {
                 encryption: "keder ohulw",
                 key: "02715",
@@ -52,4 +50,6 @@ class EnigmaTest < Minitest::Test
 
     assert_equal expected, @enigma.encrypt("hello world", "02715", "040895")
   end
+
+
 end
