@@ -103,4 +103,31 @@ class Enigma
                   date: "#{date}"
                 }
   end
+
+  def unshift_message(message)
+    message = message.downcase
+    message_character_array = message.split('')
+
+    new_characters = []
+    message_character_array.each_with_index do |character, index|
+      if in_alphabet?(character)
+        shift_amount = determine_shift_amount(index)
+        new_character = shift_alphabet(-shift_amount)[alphabet_index(character)]
+        new_characters << new_character
+      else
+        new_characters << character
+      end
+    end
+    new_message = new_characters.join("")
+  end
+
+  def decrypt(message, key = nil, date = nil)
+    create_shift(key, date)
+    decrypted_messsage = unshift_message(message)
+    decryption = {
+                  decryption: "#{decrypted_messsage}",
+                  key: "#{key}",
+                  date: "#{date}"
+                }
+  end
 end
