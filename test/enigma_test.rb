@@ -35,6 +35,7 @@ class EnigmaTest < Minitest::Test
   def test_it_can_shift_characters
 
     @enigma.create_shift("02715", "040895")
+    #mock/stub here?
 
     assert_equal 'keder ohulw', @enigma.shift_message("hello world")
     assert_equal 'keder ohulw', @enigma.shift_message("HELLO WORLD")
@@ -51,5 +52,20 @@ class EnigmaTest < Minitest::Test
     assert_equal expected, @enigma.encrypt("hello world", "02715", "040895")
   end
 
+  def it_can_unshift_message(message)
+    @enigma.create_shift("02715", "040895")
 
+    assert_equal "hello world", @enigma.unshift_message("keder ohulw")
+  end
+
+
+  def test_it_can_decrypt_a_message
+    expected = {
+                decryption: "hello world",
+                key: "02715",
+                date: "040895"
+                }
+
+    assert_equal expected, @enigma.decrypt("keder ohulw", "02715", "040895")
+  end
 end
