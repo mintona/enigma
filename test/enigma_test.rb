@@ -126,6 +126,8 @@ class EnigmaTest < Minitest::Test
     @enigma.create_shift("02715", "040895")
 
     assert_equal "hello world", @enigma.unshift_message("keder ohulw")
+    assert_equal "hello world!", @enigma.unshift_message("keder ohulw!")
+    assert_equal "hello world?", @enigma.unshift_message("keder ohulw?")
   end
 
 
