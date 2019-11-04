@@ -14,14 +14,11 @@ class Enigma
   end
 
   def create_shift(key = nil, date = nil)
-    if key == nil
+    if key.nil? && date.nil?
       key = Key.generate_number
-      # @key = key
-    end
-
-    if date == nil
       date = Offset.generate_date
-      # @date = date
+    elsif date.nil?
+      date = Offset.generate_date
     end
     @key = key
     @date = date
@@ -29,7 +26,6 @@ class Enigma
     @shift.create_shift
   end
 
-#test this!
   def determine_shift_amount(index)
     if index % 4 == 0
       @shift.a_shift
@@ -41,15 +37,15 @@ class Enigma
       @shift.d_shift
     end
   end
-#test this!
+
   def in_alphabet?(character)
-    @alphabet.include?(character)
+    @alphabet.include?(character.downcase)
   end
-#test this!
+
   def alphabet_index(character)
-    @alphabet.find_index(character)
+    @alphabet.find_index(character.downcase)
   end
-#test this!
+
   def shift_alphabet(shift_amount)
     @alphabet.rotate(shift_amount)
   end
@@ -68,51 +64,17 @@ class Enigma
         new_characters << character
       end
     end
-    new_message = new_characters.join("")
+    new_characters.join("")
   end
-
-  # def shift_message(message) ****** THIS WORKS*****
-  #   message = message.downcase
-  #   message_character_array = message.split('')
-  #
-  #   new_characters = []
-  #
-  #   message_character_array.each_with_index do |character, index|
-  #     if @alphabet.include?(character) && index % 4 == 0
-  #       alphabet_index = @alphabet.find_index(character)
-  #       shifted_alphabet = @alphabet.rotate(@shift.a_shift)
-  #       new_character = shifted_alphabet[alphabet_index]
-  #       new_characters << new_character
-  #     elsif @alphabet.include?(character) && index % 4 == 1
-  #       alphabet_index = @alphabet.find_index(character)
-  #       shifted_alphabet = @alphabet.rotate(@shift.b_shift)
-  #       new_character = shifted_alphabet[alphabet_index]
-  #       new_characters << new_character
-  #     elsif @alphabet.include?(character) && index % 4 == 2
-  #       alphabet_index = @alphabet.find_index(character)
-  #       shifted_alphabet = @alphabet.rotate(@shift.c_shift)
-  #       new_character = shifted_alphabet[alphabet_index]
-  #       new_characters << new_character
-  #     elsif @alphabet.include?(character) && index % 4 == 3
-  #       alphabet_index = @alphabet.find_index(character)
-  #       shifted_alphabet = @alphabet.rotate(@shift.d_shift)
-  #       new_character = shifted_alphabet[alphabet_index]
-  #       new_characters << new_character
-  #     else
-  #       new_characters << character
-  #     end
-  #   end
-  #   new_message = new_characters.join("")
-  # end
 
   def encrypt(message, key = nil, date = nil)
     create_shift(key, date)
     encrypted_message = shift_message(message)
-    encryption = {
-                  encryption: "#{encrypted_message}",
-                  key: "#{@key}",
-                  date: "#{@date}"
-                }
+    {
+      encryption: "#{encrypted_message}",
+      key: "#{@key}",
+      date: "#{@date}"
+    }
   end
 
   def unshift_message(message)
@@ -129,16 +91,16 @@ class Enigma
         new_characters << character
       end
     end
-    new_message = new_characters.join("")
+    new_characters.join("")
   end
 
   def decrypt(message, key = nil, date = nil)
     create_shift(key, date)
     decrypted_messsage = unshift_message(message)
-    decryption = {
-                  decryption: "#{decrypted_messsage}",
-                  key: "#{@key}",
-                  date: "#{@date}"
-                }
+    {
+      decryption: "#{decrypted_messsage}",
+      key: "#{@key}",
+      date: "#{@date}"
+    }
   end
 end
