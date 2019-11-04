@@ -13,7 +13,18 @@ class Enigma
     @shift = nil
   end
 
-  def create_shift(key, date)
+  def create_shift(key = nil, date = nil)
+    if key == nil
+      key = Key.generate_number
+      # @key = key
+    end
+
+    if date == nil
+      date = Offset.generate_date
+      # @date = date
+    end
+    @key = key
+    @date = date
     @shift = Shift.new(key, date)
     @shift.create_shift
   end
@@ -99,8 +110,8 @@ class Enigma
     encrypted_message = shift_message(message)
     encryption = {
                   encryption: "#{encrypted_message}",
-                  key: "#{key}",
-                  date: "#{date}"
+                  key: "#{@key}",
+                  date: "#{@date}"
                 }
   end
 
@@ -126,8 +137,8 @@ class Enigma
     decrypted_messsage = unshift_message(message)
     decryption = {
                   decryption: "#{decrypted_messsage}",
-                  key: "#{key}",
-                  date: "#{date}"
+                  key: "#{@key}",
+                  date: "#{@date}"
                 }
   end
 end
