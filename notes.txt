@@ -1,3 +1,10 @@
 Offsets:
 #if it's not given a date, date equals todays date
 #test_it_can_be_given_a_date
+
+date.strftime("%d%m%y") => "021119"
+
+Key:
+- need to go back and make sure it can generate random numbers and then pad w/ zeros to make it a 5 digit number: ie the example is 02715 but that is really the number 2715 padded w/ a 0 on the front.
+
+Where to test module methods?
