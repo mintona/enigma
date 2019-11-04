@@ -21,7 +21,6 @@ class Shift
 
   def create_shift
     offset = create_offset
-
     @a_shift = @key[0..1].to_i + offset[0].to_i
     @b_shift = @key[1..2].to_i + offset[1].to_i
     @c_shift = @key[2..3].to_i + offset[2].to_i

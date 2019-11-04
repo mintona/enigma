@@ -1,104 +1,106 @@
 require 'date'
-require_relative './shift'
-require_relative './offset'
-require_relative './key'
+# require_relative './shift'
+# require_relative './offset'
+# require_relative './key'
 
 class Enigma
-  # attr_reader :alphabet, :key, :date, :shift
-  #
-  # def initialize
-  #   @alphabet = ("a".."z").to_a << " "
-  #   @key = nil
-  #   @date = nil
-  #   @shift = nil
-  # end
-  #
-  # def create_shift(key, date)
-  #   @shift = Shift.new(key, date)
-  #   # require "pry"; binding.pry
-  # end
-  #
-  # def encrypt(message, key, date)
-  #   encryption = {
-  #                 encryption: "message",
-  #                 key: "#{key}",
-  #                 date: "#{date}"
-  #               }
-  # end
-  #
-  #
-  #
-  # def shift_message(message)
-  #   message = message.downcase
-  #   message_character_array = message.split('')
-  #
-  #   message_character_array.each_with_index do |character, index|
-  #     if index == 0 || index == 4
-  #       puts "#{character} is 0 or 4, so A shift"
-  #     elsif index == 1 || index == 5
-  #       puts "#{character} is 1 or 5, so B shift"
-  #     elsif index == 2 || index == 6
-  #       puts "#{character} is 2 or 6, so C shift"
-  #     elsif index == 3 || index == 7
-  #       puts "#{character} is 3 or 7, so D shift"
-  #     end
-  #   end
-  #
-  #   find_index_in_alphabet_array = message_character_array.map do |char|
-  #     @alphabet.find_index(char)
-  #   end
-  #
-  #   # x = []
-  #   # message_character_array.each do |character|
-  #   #   if @alphabet.include?(character)
-  #   #     # puts character
-  #   #     alphabet_index = @alphabet.find_index(character)
-  #   #     # puts alphabet_index
-  #   #     shifted_alphabet = @alphabet.rotate(3)
-  #   #     new_character = shifted_alphabet[alphabet_index]
-  #   #     # puts new_character
-  #   #     puts "I was letter #{character} at regular alphabet index #{alphabet_index}. The alphabet got shifted by 3, so now I'm this new character: #{new_character}."
-  #   #     x << new_character
-  #   #   else
-  #   #     # puts character
-  #   #     puts "I started as #{character} and because I'm not in the alphabet array, I stayed the same, see?: #{character}"
-  #   #     x << character
-  #   #   end
-  #   # end
-  #   # new_message = x.join("")
-  #
-  #   y = []
-  #   message_character_array.each_with_index do |character, index|
-  #     if @alphabet.include?(character) && index % 4 == 0
-  #       alphabet_index = @alphabet.find_index(character)
-  #       shifted_alphabet = @alphabet.rotate(3)
-  #       new_character = shifted_alphabet[alphabet_index]
-  #       puts "I was letter #{character} at regular alphabet index #{alphabet_index}. The alphabet got shifted by 3, so now I'm this new character: #{new_character}. My index is #{index} so I would get an A shift"
-  #       y << new_character
-  #     elsif @alphabet.include?(character) && index % 4 == 1
-  #       alphabet_index = @alphabet.find_index(character)
-  #       shifted_alphabet = @alphabet.rotate(3)
-  #       new_character = shifted_alphabet[alphabet_index]
-  #       puts "I was letter #{character} at regular alphabet index #{alphabet_index}. The alphabet got shifted by 3, so now I'm this new character: #{new_character}. My index is #{index} so I would get an B shift"
-  #       y << new_character
-  #     elsif @alphabet.include?(character) && index % 4 == 2
-  #       alphabet_index = @alphabet.find_index(character)
-  #       shifted_alphabet = @alphabet.rotate(3)
-  #       new_character = shifted_alphabet[alphabet_index]
-  #       puts "I was letter #{character} at regular alphabet index #{alphabet_index}. The alphabet got shifted by 3, so now I'm this new character: #{new_character}. My index is #{index} so I would get a C shift"
-  #       y << new_character
-  #     elsif @alphabet.include?(character) && index % 4 == 3
-  #       alphabet_index = @alphabet.find_index(character)
-  #       shifted_alphabet = @alphabet.rotate(3)
-  #       new_character = shifted_alphabet[alphabet_index]
-  #       puts "I was letter #{character} at regular alphabet index #{alphabet_index}. The alphabet got shifted by 3, so now I'm this new character: #{new_character}. My index is #{index} so I would get an D shift"
-  #       y << new_character
-  #     else
-  #       puts "I started as #{character} and because I'm not in the alphabet array, I stayed the same, see?: #{character}"
-  #       y << character
-  #     end
-  #   end
-  #
-  #   new_message = y.join("")
-  # end
+  attr_reader :alphabet, :key, :date, :shift
+
+  def initialize
+    @alphabet = ("a".."z").to_a << " "
+    @key = nil
+    @date = nil
+    @shift = nil
+  end
+
+  def create_shift(key = nil, date = nil)
+    if key.nil? && date.nil?
+      key = Key.generate_number
+      date = Offset.generate_date
+    elsif date.nil?
+      date = Offset.generate_date
+    end
+    @key = key
+    @date = date
+    @shift = Shift.new(key, date)
+    @shift.create_shift
+  end
+
+  def determine_shift_amount(index)
+    if index % 4 == 0
+      @shift.a_shift
+    elsif index % 4 == 1
+      @shift.b_shift
+    elsif index % 4 == 2
+      @shift.c_shift
+    elsif index % 4 == 3
+      @shift.d_shift
+    end
+  end
+
+  def in_alphabet?(character)
+    @alphabet.include?(character.downcase)
+  end
+
+  def alphabet_index(character)
+    @alphabet.find_index(character.downcase)
+  end
+
+  def shift_alphabet(shift_amount)
+    @alphabet.rotate(shift_amount)
+  end
+
+  def shift_message(message)
+    message = message.downcase
+    message_character_array = message.split('')
+
+    new_characters = []
+    message_character_array.each_with_index do |character, index|
+      if in_alphabet?(character)
+        shift_amount = determine_shift_amount(index)
+        new_character = shift_alphabet(shift_amount)[alphabet_index(character)]
+        new_characters << new_character
+      else
+        new_characters << character
+      end
+    end
+    new_characters.join("")
+  end
+
+  def encrypt(message, key = nil, date = nil)
+    create_shift(key, date)
+    encrypted_message = shift_message(message)
+    {
+      encryption: "#{encrypted_message}",
+      key: "#{@key}",
+      date: "#{@date}"
+    }
+  end
+
+  def unshift_message(message)
+    message = message.downcase
+    message_character_array = message.split('')
+
+    new_characters = []
+    message_character_array.each_with_index do |character, index|
+      if in_alphabet?(character)
+        shift_amount = determine_shift_amount(index)
+        new_character = shift_alphabet(-shift_amount)[alphabet_index(character)]
+        new_characters << new_character
+      else
+        new_characters << character
+      end
+    end
+    new_characters.join("")
+  end
+
+  def decrypt(message, key = nil, date = nil)
+    create_shift(key, date)
+    decrypted_messsage = unshift_message(message)
+    {
+      decryption: "#{decrypted_messsage}",
+      key: "#{@key}",
+      date: "#{@date}"
+    }
+  end
 end
