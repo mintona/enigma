@@ -24,15 +24,10 @@ class Enigma
   end
 
   def determine_shift_amount(index)
-    if index % 4 == 0
-      @shift.a_shift
-    elsif index % 4 == 1
-      @shift.b_shift
-    elsif index % 4 == 2
-      @shift.c_shift
-    elsif index % 4 == 3
-      @shift.d_shift
-    end
+    return @shift.a_shift if index % 4 == 0
+    return @shift.b_shift if index % 4 == 1
+    return @shift.c_shift if index % 4 == 2
+    return @shift.d_shift if index % 4 == 3
   end
 
   def in_alphabet?(character)
@@ -57,22 +52,20 @@ class Enigma
         character
       end
     end.join("")
-    # new_characters.join("")
   end
 
   def encrypt(message, key = nil, date = nil)
     create_shift(key, date)
-    encrypted_message = shift_message(message)
-    {
-      encryption: "#{encrypted_message}",
-      key: "#{@key}",
-      date: "#{@date}"
-    }
+    confirmation = Hash.new(0)
+    confirmation[:encryption] = "#{shift_message(message)}"
+    confirmation[:key] = "#{@key}"
+    confirmation[:date] = "#{@date}"
+    confirmation
   end
 
   def unshift_message(message)
     message_characters = message.downcase.split('')
-    new_characters = message_characters.each_with_index.map do |character, index|
+    message_characters.each_with_index.map do |character, index|
       if in_alphabet?(character)
         shift_amount = determine_shift_amount(index)
         new_character = shift_alphabet(-shift_amount)[alphabet_index(character)]
@@ -80,16 +73,14 @@ class Enigma
         character
       end
     end.join("")
-    # new_characters.join("")
   end
 
   def decrypt(message, key = nil, date = nil)
     create_shift(key, date)
-    decrypted_messsage = unshift_message(message)
-    {
-      decryption: "#{decrypted_messsage}",
-      key: "#{@key}",
-      date: "#{@date}"
-    }
+    confirmation = Hash.new(0)
+    confirmation[:decryption] = "#{unshift_message(message)}"
+    confirmation[:key] = "#{@key}"
+    confirmation[:date] = "#{@date}"
+    confirmation
   end
 end
