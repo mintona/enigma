@@ -1,7 +1,4 @@
 require 'date'
-# require_relative './shift'
-# require_relative './offset'
-# require_relative './key'
 
 class Enigma
   attr_reader :alphabet, :key, :date, :shift
@@ -51,18 +48,13 @@ class Enigma
   end
 
   def shift_message(message)
-    message = message.downcase
-    message_character_array = message.split('')
-
-    new_characters = []
-    #chain .map onto message_character_array.each_with_index.map do asldkfjasldkjf
-    message_character_array.each_with_index do |character, index|
+    message_character_array = message.downcase.split('')
+    new_characters = message_character_array.each_with_index.map do |character, index|
       if in_alphabet?(character)
         shift_amount = determine_shift_amount(index)
         new_character = shift_alphabet(shift_amount)[alphabet_index(character)]
-        new_characters << new_character
       else
-        new_characters << character
+        character
       end
     end
     new_characters.join("")
@@ -79,17 +71,13 @@ class Enigma
   end
 
   def unshift_message(message)
-    message = message.downcase
-    message_character_array = message.split('')
-
-    new_characters = []
-    message_character_array.each_with_index do |character, index|
+    message_character_array = message.downcase.split('')
+    new_characters = message_character_array.each_with_index.map do |character, index|
       if in_alphabet?(character)
         shift_amount = determine_shift_amount(index)
         new_character = shift_alphabet(-shift_amount)[alphabet_index(character)]
-        new_characters << new_character
       else
-        new_characters << character
+        character
       end
     end
     new_characters.join("")
