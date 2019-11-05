@@ -55,6 +55,7 @@ class Enigma
     message_character_array = message.split('')
 
     new_characters = []
+    #chain .map onto message_character_array.each_with_index.map do asldkfjasldkjf
     message_character_array.each_with_index do |character, index|
       if in_alphabet?(character)
         shift_amount = determine_shift_amount(index)

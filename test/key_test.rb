@@ -11,6 +11,9 @@ class KeyTest < Minitest::Test
     assert_instance_of Key, @key
   end
 
+  #make sure it's all numbers in the key
+  #make sure the output is a string 
+
   def test_it_can_generate_random_five_digit_number
     number1 = Key.generate_number
 
