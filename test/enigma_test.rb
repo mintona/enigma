@@ -127,7 +127,7 @@ class EnigmaTest < Minitest::Test
 
     assert_equal "hello world", @enigma.unshift_message("keder ohulw")
     assert_equal "hello world!", @enigma.unshift_message("keder ohulw!")
-    assert_equal "hello world?", @enigma.unshift_message("keder ohulw?")
+    assert_equal "!hello world?", @enigma.unshift_message("!keder ohulw?")
   end
 
 
