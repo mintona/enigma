@@ -93,14 +93,14 @@ class EnigmaTest < Minitest::Test
     assert_equal 26, @enigma.alphabet_index(" ")
   end
 
-  def test_it_can_shift_alphabet_a_given_amount
+  def test_it_can_rotate_alphabet_a_given_amount
     assert_equal 0, @enigma.alphabet_index("a")
-    rotated_alphabet = @enigma.shift_alphabet(3)
+    rotated_alphabet = @enigma.rotate_alphabet(3)
     expected = rotated_alphabet.find_index("d")
     assert_equal 0, expected
 
     assert_equal 0, @enigma.alphabet_index("a")
-    rotated_alphabet = @enigma.shift_alphabet(-3)
+    rotated_alphabet = @enigma.rotate_alphabet(-3)
     expected = rotated_alphabet.find_index("y")
     assert_equal 0, expected
   end

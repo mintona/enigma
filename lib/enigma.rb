@@ -38,7 +38,7 @@ class Enigma
     @alphabet.find_index(character.downcase)
   end
 
-  def shift_alphabet(shift_amount)
+  def rotate_alphabet(shift_amount)
     @alphabet.rotate(shift_amount)
   end
 
@@ -47,7 +47,7 @@ class Enigma
     new_characters = message_characters.each_with_index.map do |character, index|
       if in_alphabet?(character)
         shift_amount = determine_shift_amount(index)
-        new_character = shift_alphabet(shift_amount)[alphabet_index(character)]
+        new_character = rotate_alphabet(shift_amount)[alphabet_index(character)]
       else
         character
       end
@@ -68,7 +68,7 @@ class Enigma
     message_characters.each_with_index.map do |character, index|
       if in_alphabet?(character)
         shift_amount = determine_shift_amount(index)
-        new_character = shift_alphabet(-shift_amount)[alphabet_index(character)]
+        new_character = rotate_alphabet(-shift_amount)[alphabet_index(character)]
       else
         character
       end
