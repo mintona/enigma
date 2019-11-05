@@ -64,6 +64,7 @@ class Enigma
     confirmation[:key] = "#{@key}"
     confirmation[:date] = "#{@date}"
     confirmation
+    # {encryption: , key: }
   end
 
   def unshift_message(message)
@@ -71,6 +72,7 @@ class Enigma
       if in_alphabet?(character)
         shift_amount = determine_shift_amount(index)
         new_character = rotate_alphabet(-shift_amount)[alphabet_index(character)]
+        # rotate_alphabet(-shift_amount)[alphabet_index(character)]
       else
         character
       end
