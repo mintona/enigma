@@ -24,55 +24,55 @@ class EnigmaTest < Minitest::Test
     assert_nil @enigma.shift
   end
 
-  def test_it_can_create_shift_with_key_and_date
+  def test_it_can_populate_shift_with_key_and_date
 
-    @enigma.create_shift("02715", "040895")
+    @enigma.populate_shift("02715", "040895")
 
     assert_equal "02715", @enigma.key
     assert_equal "040895", @enigma.date
 
-    assert_equal 3, @enigma.shift.a_shift
-    assert_equal 27, @enigma.shift.b_shift
-    assert_equal 73, @enigma.shift.c_shift
-    assert_equal 20, @enigma.shift.d_shift
+    assert_equal 3, @enigma.shift[:a_shift]
+    assert_equal 27, @enigma.shift[:b_shift]
+    assert_equal 73, @enigma.shift[:c_shift]
+    assert_equal 20, @enigma.shift[:d_shift]
   end
 
   def test_it_can_create_shift_with_key_only
     Date.expects(:today).returns(Date.new(2019,11,2))
 #offset should = "021119"
-    @enigma.create_shift("02715")
+    @enigma.populate_shift("02715")
 
     assert_equal "02715", @enigma.key
     assert_equal "021119", @enigma.date
 
-    assert_equal 4, @enigma.shift.a_shift
-    assert_equal 28, @enigma.shift.b_shift
-    assert_equal 77, @enigma.shift.c_shift
-    assert_equal 16, @enigma.shift.d_shift
+    assert_equal 4, @enigma.shift[:a_shift]
+    assert_equal 28, @enigma.shift[:b_shift]
+    assert_equal 77, @enigma.shift[:c_shift]
+    assert_equal 16, @enigma.shift[:d_shift]
   end
 
   def test_it_can_create_shift_without_key_or_date
     Date.expects(:today).returns(Date.new(2019,11,2))
     Key.expects(:generate_number).returns("12345")
 
-    @enigma.create_shift
+    @enigma.populate_shift
 
     assert_equal "12345", @enigma.key
     assert_equal "021119", @enigma.date
 
-    assert_equal 14, @enigma.shift.a_shift
-    assert_equal 24, @enigma.shift.b_shift
-    assert_equal 40, @enigma.shift.c_shift
-    assert_equal 46, @enigma.shift.d_shift
+    assert_equal 14, @enigma.shift[:a_shift]
+    assert_equal 24, @enigma.shift[:b_shift]
+    assert_equal 40, @enigma.shift[:c_shift]
+    assert_equal 46, @enigma.shift[:d_shift]
   end
 
   def test_it_can_determine_shift_amount_by_character
-    @enigma.create_shift("02715", "040895")
+    @enigma.populate_shift("02715", "040895")
 
-    assert_equal @enigma.shift.a_shift, @enigma.determine_shift_amount(0)
-    assert_equal @enigma.shift.b_shift, @enigma.determine_shift_amount(1)
-    assert_equal @enigma.shift.c_shift, @enigma.determine_shift_amount(2)
-    assert_equal @enigma.shift.d_shift, @enigma.determine_shift_amount(3)
+    assert_equal @enigma.shift[:a_shift], @enigma.determine_shift_amount(0)
+    assert_equal @enigma.shift[:b_shift], @enigma.determine_shift_amount(1)
+    assert_equal @enigma.shift[:c_shift], @enigma.determine_shift_amount(2)
+    assert_equal @enigma.shift[:d_shift], @enigma.determine_shift_amount(3)
   end
 
   def test_it_can_determine_if_character_is_in_alphabet
@@ -104,7 +104,7 @@ class EnigmaTest < Minitest::Test
 
   def test_it_can_shift_characters
 
-    @enigma.create_shift("02715", "040895")
+    @enigma.populate_shift("02715", "040895")
     #mock/stub here?
 
     assert_equal 'keder ohulw', @enigma.shift_message("hello world")
@@ -123,7 +123,7 @@ class EnigmaTest < Minitest::Test
   end
 
   def it_can_unshift_message(message)
-    @enigma.create_shift("02715", "040895")
+    @enigma.populate_shift("02715", "040895")
 
     assert_equal "hello world", @enigma.unshift_message("keder ohulw")
     assert_equal "hello world!", @enigma.unshift_message("keder ohulw!")
