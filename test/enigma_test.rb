@@ -105,6 +105,12 @@ class EnigmaTest < Minitest::Test
     assert_equal 0, expected
   end
 
+  def test_it_can_convert_message_into_array_of_characters
+    expected = ["h", "e", "l", "l", "o", " ", "!"]
+
+    assert_equal expected, @enigma.message_characters("hello !")
+  end
+
   def test_it_can_shift_characters
 
     @enigma.create_shift("02715", "040895")
