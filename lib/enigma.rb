@@ -48,16 +48,16 @@ class Enigma
   end
 
   def shift_message(message)
-    message_character_array = message.downcase.split('')
-    new_characters = message_character_array.each_with_index.map do |character, index|
+    message_characters = message.downcase.split('')
+    new_characters = message_characters.each_with_index.map do |character, index|
       if in_alphabet?(character)
         shift_amount = determine_shift_amount(index)
         new_character = shift_alphabet(shift_amount)[alphabet_index(character)]
       else
         character
       end
-    end
-    new_characters.join("")
+    end.join("")
+    # new_characters.join("")
   end
 
   def encrypt(message, key = nil, date = nil)
@@ -71,16 +71,16 @@ class Enigma
   end
 
   def unshift_message(message)
-    message_character_array = message.downcase.split('')
-    new_characters = message_character_array.each_with_index.map do |character, index|
+    message_characters = message.downcase.split('')
+    new_characters = message_characters.each_with_index.map do |character, index|
       if in_alphabet?(character)
         shift_amount = determine_shift_amount(index)
         new_character = shift_alphabet(-shift_amount)[alphabet_index(character)]
       else
         character
       end
-    end
-    new_characters.join("")
+    end.join("")
+    # new_characters.join("")
   end
 
   def decrypt(message, key = nil, date = nil)
