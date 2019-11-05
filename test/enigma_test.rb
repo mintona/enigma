@@ -15,6 +15,9 @@ class EnigmaTest < Minitest::Test
 
   def test_it_has_the_alphabet
     expected = ("a".."z").to_a << " "
+
+    assert_equal true, @enigma.alphabet.include?("a")
+    assert_equal true, @enigma.alphabet.include?(" ")
     assert_equal expected, @enigma.alphabet
   end
 
@@ -122,12 +125,11 @@ class EnigmaTest < Minitest::Test
     assert_equal expected, @enigma.encrypt("hello world", "02715", "040895")
   end
 
-  def it_can_unshift_message(message)
+  def test_it_can_unshift_message
     @enigma.create_shift("02715", "040895")
 
     assert_equal "hello world", @enigma.unshift_message("keder ohulw")
     assert_equal "hello world!", @enigma.unshift_message("keder ohulw!")
-    assert_equal "!hello world?", @enigma.unshift_message("!keder ohulw?")
   end
 
 
@@ -142,6 +144,7 @@ class EnigmaTest < Minitest::Test
   end
 
   def test_it_can_encrypt_a_message_with_key_only
+
     Date.expects(:today).returns(Date.new(1995,8,4))
 
     expected = {
@@ -154,6 +157,7 @@ class EnigmaTest < Minitest::Test
   end
 
   def test_it_can_decrypt_a_message_with_key_only
+
     Date.expects(:today).at_least_once.returns(Date.new(1995,8,4))
 
     encrypted = @enigma.encrypt("hello world", "02715")
@@ -168,6 +172,7 @@ class EnigmaTest < Minitest::Test
   end
 
   def test_it_can_encrypt_a_message_without_key_or_date
+
     Date.expects(:today).returns(Date.new(1995,8,4))
     Key.expects(:generate_number).returns("02715")
 
@@ -182,6 +187,7 @@ class EnigmaTest < Minitest::Test
 
 #this next test might be totally bogus
   def test_it_can_decrypt_a_message_without_key_or_date
+
     Date.expects(:today).at_least_once.returns(Date.new(1995,8,4))
     Key.expects(:generate_number).at_least_once.returns("02715")
 
