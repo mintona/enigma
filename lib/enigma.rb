@@ -10,7 +10,7 @@ class Enigma
     @shift = nil
   end
 
-  def create_shift(key = nil, date = nil)
+  def populate_shift(key = nil, date = nil)
     if key.nil? && date.nil?
       key = Key.generate_number
       date = Offset.generate_date
@@ -19,19 +19,18 @@ class Enigma
     end
     @key = key
     @date = date
-    @shift = Shift.new(key, date)
-    @shift.create_shift
+    @shift = Shift.create_shift(key, date)
   end
 
   def determine_shift_amount(index)
     if index % 4 == 0
-      @shift.a_shift
+      @shift[:a_shift]
     elsif index % 4 == 1
-      @shift.b_shift
+      @shift[:b_shift]
     elsif index % 4 == 2
-      @shift.c_shift
+      @shift[:c_shift]
     elsif index % 4 == 3
-      @shift.d_shift
+      @shift[:d_shift]
     end
   end
 
@@ -61,7 +60,7 @@ class Enigma
   end
 
   def encrypt(message, key = nil, date = nil)
-    create_shift(key, date)
+    populate_shift(key, date)
     encrypted_message = shift_message(message)
     {
       encryption: "#{encrypted_message}",
@@ -84,7 +83,7 @@ class Enigma
   end
 
   def decrypt(message, key = nil, date = nil)
-    create_shift(key, date)
+    populate_shift(key, date)
     decrypted_messsage = unshift_message(message)
     {
       decryption: "#{decrypted_messsage}",
