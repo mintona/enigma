@@ -5,29 +5,20 @@ class Enigma
 
   def initialize
     @alphabet = ("a".."z").to_a << " "
-    @key = nil
-    @date = nil
-    @shift = nil
+    @key = Key.generate_number
+    @date = Offset.generate_date
+    @shift = []
   end
 
-  def create_shift(key = nil, date = nil)
-    if key.nil? && date.nil?
-      key = Key.generate_number
-      date = Offset.generate_date
-    elsif date.nil?
-      date = Offset.generate_date
-    end
-    @key = key
-    @date = date
-    @shift = Shift.new(key, date)
-    @shift.create_shift
+  def populate_shift(key = @key, date = @date)
+    @shift = Shift.create_shift(key, date)
   end
 
   def determine_shift_amount(index)
-    return @shift.a_shift if index % 4 == 0
-    return @shift.b_shift if index % 4 == 1
-    return @shift.c_shift if index % 4 == 2
-    return @shift.d_shift if index % 4 == 3
+    return @shift[0] if index % 4 == 0
+    return @shift[1] if index % 4 == 1
+    return @shift[2] if index % 4 == 2
+    return @shift[3] if index % 4 == 3
   end
 
   def in_alphabet?(character)
@@ -57,16 +48,6 @@ class Enigma
     end.join("")
   end
 
-  def encrypt(message, key = nil, date = nil)
-    create_shift(key, date)
-    confirmation = Hash.new(0)
-    confirmation[:encryption] = "#{shift_message(message)}"
-    confirmation[:key] = "#{@key}"
-    confirmation[:date] = "#{@date}"
-    confirmation
-    # {encryption: , key: }
-  end
-
   def unshift_message(message)
     message_characters(message).each_with_index.map do |character, index|
       if in_alphabet?(character)
@@ -79,12 +60,15 @@ class Enigma
     end.join("")
   end
 
-  def decrypt(message, key = nil, date = nil)
-    create_shift(key, date)
-    confirmation = Hash.new(0)
-    confirmation[:decryption] = "#{unshift_message(message)}"
-    confirmation[:key] = "#{@key}"
-    confirmation[:date] = "#{@date}"
-    confirmation
+  def encrypt(message, key = @key, date = @date)
+    populate_shift(key, date)
+    encrypted_message = shift_message(message)
+    {encryption: "#{encrypted_message}", key: "#{key}", date: "#{date}"}
+  end
+
+  def decrypt(message, key = @key, date = @date)
+    populate_shift(key, date)
+    decrypted_messsage = unshift_message(message)
+    {decryption: "#{decrypted_messsage}", key: "#{key}", date: "#{date}"}
   end
 end
