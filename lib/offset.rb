@@ -1,6 +1,6 @@
 require 'date'
 
-class Date
+class Offset
 
   def self.generate_date
     date = Date.today
