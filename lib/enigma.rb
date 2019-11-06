@@ -15,15 +15,10 @@ class Enigma
   end
 
   def determine_shift_amount(index)
-    if index % 4 == 0
-      @shift[:a_shift]
-    elsif index % 4 == 1
-      @shift[:b_shift]
-    elsif index % 4 == 2
-      @shift[:c_shift]
-    elsif index % 4 == 3
-      @shift[:d_shift]
-    end
+    return @shift[:a_shift] if index % 4 == 0
+    return @shift[:b_shift] if index % 4 == 1
+    return @shift[:c_shift] if index % 4 == 2
+    return @shift[:d_shift] if index % 4 == 3
   end
 
   def in_alphabet?(character)
@@ -52,14 +47,9 @@ class Enigma
   end
 
   def encrypt(message, key = @key, date = @date)
-    # shift = Shift.create_shift(key, date)
     populate_shift(key, date)
     encrypted_message = shift_message(message)
-    {
-      encryption: "#{encrypted_message}",
-      key: "#{key}",
-      date: "#{date}"
-    }
+    {encryption: "#{encrypted_message}", key: "#{key}", date: "#{date}"}
   end
 
   def unshift_message(message)
@@ -78,10 +68,6 @@ class Enigma
   def decrypt(message, key = @key, date = @date)
     populate_shift(key, date)
     decrypted_messsage = unshift_message(message)
-    {
-      decryption: "#{decrypted_messsage}",
-      key: "#{key}",
-      date: "#{date}"
-    }
+    {decryption: "#{decrypted_messsage}", key: "#{key}", date: "#{date}"}
   end
 end
