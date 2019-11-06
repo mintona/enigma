@@ -10,7 +10,7 @@ class Enigma
     @shift = []
   end
 
-  def populate_shift(key = @key, date = @date)
+  def set_shift(key = @key, date = @date)
     @shift = Shift.create_shift(key, date)
   end
 
@@ -37,37 +37,34 @@ class Enigma
     message.downcase.split('')
   end
 
+  def new_character(character, index, positive_rotation = true)
+    if positive_rotation == true
+      rotate_alphabet(determine_shift_amount(index))[alphabet_index(character)]
+    else
+      rotate_alphabet(-determine_shift_amount(index))[alphabet_index(character)]
+    end
+  end
+
   def shift_message(message)
     message_characters(message).each_with_index.map do |character, index|
-      if in_alphabet?(character)
-        shift_amount = determine_shift_amount(index)
-        new_character = rotate_alphabet(shift_amount)[alphabet_index(character)]
-      else
-        character
-      end
+      in_alphabet?(character) ? new_character(character, index) : character
     end.join("")
   end
 
   def unshift_message(message)
     message_characters(message).each_with_index.map do |character, index|
-      if in_alphabet?(character)
-        shift_amount = determine_shift_amount(index)
-        new_character = rotate_alphabet(-shift_amount)[alphabet_index(character)]
-        # rotate_alphabet(-shift_amount)[alphabet_index(character)]
-      else
-        character
-      end
+      in_alphabet?(character) ? new_character(character, index, false) : character
     end.join("")
   end
 
   def encrypt(message, key = @key, date = @date)
-    populate_shift(key, date)
+    set_shift(key, date)
     encrypted_message = shift_message(message)
     {encryption: "#{encrypted_message}", key: "#{key}", date: "#{date}"}
   end
 
   def decrypt(message, key = @key, date = @date)
-    populate_shift(key, date)
+    set_shift(key, date)
     decrypted_messsage = unshift_message(message)
     {decryption: "#{decrypted_messsage}", key: "#{key}", date: "#{date}"}
   end
