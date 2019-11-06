@@ -19,6 +19,8 @@ class EnigmaTest < Minitest::Test
   def test_it_has_the_alphabet
     expected = ("a".."z").to_a << " "
     assert_equal expected, @enigma.alphabet
+    assert_equal "a", @enigma.alphabet.first
+    assert_equal " ", @enigma.alphabet.last
   end
 
   def test_it_has_a_key_and_date
@@ -29,14 +31,11 @@ class EnigmaTest < Minitest::Test
 
     assert_equal '12345', enigma.key
     assert_equal '021119', enigma.date
-    # assert_nil @enigma.shift
+    assert_equal ({}), enigma.shift
   end
 
   def test_it_can_populate_shift_with_key_and_date
     @enigma.populate_shift("02715", "040895")
-
-    # assert_equal "02715", @enigma.key
-    # assert_equal "040895", @enigma.date
 
     assert_equal 3, @enigma.shift[:a_shift]
     assert_equal 27, @enigma.shift[:b_shift]
@@ -45,12 +44,7 @@ class EnigmaTest < Minitest::Test
   end
 
   def test_it_can_popluate_shift_with_key_only
-    # Date.expects(:today).returns(Date.new(2019,11,2))
-#offset should = "021119"
     @enigma.populate_shift("02715")
-
-    # assert_equal "02715", @enigma.key
-    # assert_equal "021119", @enigma.date
 
     assert_equal 4, @enigma.shift[:a_shift]
     assert_equal 28, @enigma.shift[:b_shift]
@@ -59,9 +53,6 @@ class EnigmaTest < Minitest::Test
   end
 
   def test_it_can_create_shift_without_key_or_date
-    # Date.expects(:today).returns(Date.new(2019,11,2))
-    # Key.expects(:generate_number).returns("12345")
-
     @enigma.populate_shift
 
     assert_equal "12345", @enigma.key
@@ -74,7 +65,6 @@ class EnigmaTest < Minitest::Test
   end
 
   def test_it_can_determine_shift_amount_by_character
-
     @enigma.populate_shift("02715", "040895")
 
     assert_equal @enigma.shift[:a_shift], @enigma.determine_shift_amount(0)
@@ -111,9 +101,7 @@ class EnigmaTest < Minitest::Test
   end
 
   def test_it_can_shift_characters
-
     @enigma.populate_shift("02715", "040895")
-    #mock/stub here?
 
     assert_equal 'keder ohulw', @enigma.shift_message("hello world")
     assert_equal 'keder ohulw', @enigma.shift_message("HELLO WORLD")
@@ -195,19 +183,19 @@ class EnigmaTest < Minitest::Test
   end
 
 #this next test might be totally bogus
-  def test_it_can_decrypt_a_message_without_key_or_date
-    skip
-    Date.expects(:today).at_least_once.returns(Date.new(1995,8,4))
-    Key.expects(:generate_number).at_least_once.returns("02715")
-
-    encrypted = @enigma.encrypt("hello world")
-
-    expected = {
-                decryption: "hello world",
-                key: "02715",
-                date: "040895"
-                }
-
-    assert_equal expected, @enigma.decrypt(encrypted[:encryption])
-  end
+  # def test_it_can_decrypt_a_message_without_key_or_date
+  #   skip
+  #   Date.expects(:today).at_least_once.returns(Date.new(1995,8,4))
+  #   Key.expects(:generate_number).at_least_once.returns("02715")
+  #
+  #   encrypted = @enigma.encrypt("hello world")
+  #
+  #   expected = {
+  #               decryption: "hello world",
+  #               key: "02715",
+  #               date: "040895"
+  #               }
+  #
+  #   assert_equal expected, @enigma.decrypt(encrypted[:encryption])
+  # end
 end
