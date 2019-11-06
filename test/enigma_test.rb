@@ -193,33 +193,17 @@ class EnigmaTest < Minitest::Test
   end
 
   def test_it_can_encrypt_a_message_with_random_key_and_todays_date
-    Date.expects(:today).returns(Date.new(1995,8,4))
-    Key.expects(:generate_number).returns("02715")
+    Date.expects(:today).returns(Date.new(2019,11,5))
+    Key.expects(:generate_number).returns("12345")
     enigma = Enigma.new
 
     expected = {
-                encryption: "keder ohulw",
-                key: "02715",
-                date: "040895"
+                encryption: "vbydbxigeiq",
+                key: "12345",
+                date: "051119"
                 }
 
     assert_equal expected, enigma.encrypt("hello world")
   end
 
-#this next test might be totally bogus
-  # def test_it_can_decrypt_a_message_without_key_or_date
-  #   skip
-  #   Date.expects(:today).at_least_once.returns(Date.new(1995,8,4))
-  #   Key.expects(:generate_number).at_least_once.returns("02715")
-  #
-  #   encrypted = @enigma.encrypt("hello world")
-  #
-  #   expected = {
-  #               decryption: "hello world",
-  #               key: "02715",
-  #               date: "040895"
-  #               }
-  #
-  #   assert_equal expected, @enigma.decrypt(encrypted[:encryption])
-  # end
 end
