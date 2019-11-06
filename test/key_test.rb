@@ -25,17 +25,6 @@ class KeyTest < Minitest::Test
     assert_equal true, expected_2
   end
 
-  def test_it_generates_only_numbers
-    number_1 = Key.generate_number
-    number_2 = "a23fe"
-
-    expected_1 = number_1.to_i.digits.length == 5
-    expected_2 = number_2.to_i.digits.length < 5
-
-    assert_equal true, expected_1
-    assert_equal true, expected_2
-  end
-
   def test_it_can_start_with_zero
     Key.expects(:rand).returns(1234)
     assert_equal "01234", Key.generate_number
