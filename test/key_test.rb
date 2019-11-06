@@ -3,43 +3,44 @@ require_relative '../lib/key'
 
 class KeyTest < Minitest::Test
 
-  def setup
-    @key = Key.new
-  end
-
   def test_it_exists
-    assert_instance_of Key, @key
+    key = Key.new
+    assert_instance_of Key, key
   end
 
-  #make sure it's all numbers in the key
-  #make sure the output is a string 
+  def test_it_can_generate_random_five_digit_number_as_a_string
+    number_1 = Key.generate_number
+    assert_equal 5, number_1.length
 
-  def test_it_can_generate_random_five_digit_number
-    number1 = Key.generate_number
+    number_2 = Key.generate_number
+    assert_equal 5, number_2.length
 
-    assert_equal 5, number1.length
+    number_3 = Key.generate_number
+    assert_equal 5, number_3.length
 
-    number2 = Key.generate_number
+    expected_1 = number_1 != number_2 && number_2 != number_3 && number_1 != number_3
+    assert_equal true, expected_1
 
-    assert_equal 5, number2.length
+    expected_2 = [number_1, number_2, number_3].all? { |number| number.class == String }
+    assert_equal true, expected_2
+  end
 
-    number3 = Key.generate_number
+  def test_it_generates_only_numbers
+    number_1 = Key.generate_number
+    number_2 = "a23fe"
 
-    assert_equal 5, number3.length
+    expected_1 = number_1.to_i.digits.length == 5
+    expected_2 = number_2.to_i.digits.length < 5
 
-    expected = number1 != number2 && number2 != number3 && number1 != number3
-    #should this be tested more? this will be a problem if it ever generates the same number twice
-    #seems super unlikely
-    assert_equal true, expected
+    assert_equal true, expected_1
+    assert_equal true, expected_2
   end
 
   def test_it_can_start_with_zero
     Key.expects(:rand).returns(1234)
-
     assert_equal "01234", Key.generate_number
 
     Key.expects(:rand).returns(234)
-
     assert_equal "00234", Key.generate_number
   end
 
