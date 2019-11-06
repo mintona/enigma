@@ -5,20 +5,12 @@ class Enigma
 
   def initialize
     @alphabet = ("a".."z").to_a << " "
-    @key = nil
-    @date = nil
-    @shift = nil
+    @key = Key.generate_number
+    @date = Offset.generate_date
+    @shift = Hash.new(0)
   end
 
-  def populate_shift(key = nil, date = nil)
-    if key.nil? && date.nil?
-      key = Key.generate_number
-      date = Offset.generate_date
-    elsif date.nil?
-      date = Offset.generate_date
-    end
-    @key = key
-    @date = date
+  def populate_shift(key = @key, date = @date)
     @shift = Shift.create_shift(key, date)
   end
 
@@ -59,13 +51,14 @@ class Enigma
     new_characters.join("")
   end
 
-  def encrypt(message, key = nil, date = nil)
+  def encrypt(message, key = @key, date = @date)
+    # shift = Shift.create_shift(key, date)
     populate_shift(key, date)
     encrypted_message = shift_message(message)
     {
       encryption: "#{encrypted_message}",
-      key: "#{@key}",
-      date: "#{@date}"
+      key: "#{key}",
+      date: "#{date}"
     }
   end
 
@@ -82,13 +75,13 @@ class Enigma
     new_characters.join("")
   end
 
-  def decrypt(message, key = nil, date = nil)
+  def decrypt(message, key = @key, date = @date)
     populate_shift(key, date)
     decrypted_messsage = unshift_message(message)
     {
       decryption: "#{decrypted_messsage}",
-      key: "#{@key}",
-      date: "#{@date}"
+      key: "#{key}",
+      date: "#{date}"
     }
   end
 end
