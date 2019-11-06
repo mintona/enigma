@@ -46,12 +46,6 @@ class Enigma
     new_characters.join("")
   end
 
-  def encrypt(message, key = @key, date = @date)
-    populate_shift(key, date)
-    encrypted_message = shift_message(message)
-    {encryption: "#{encrypted_message}", key: "#{key}", date: "#{date}"}
-  end
-
   def unshift_message(message)
     message_character_array = message.downcase.split('')
     new_characters = message_character_array.each_with_index.map do |character, index|
@@ -63,6 +57,12 @@ class Enigma
       end
     end
     new_characters.join("")
+  end
+
+  def encrypt(message, key = @key, date = @date)
+    populate_shift(key, date)
+    encrypted_message = shift_message(message)
+    {encryption: "#{encrypted_message}", key: "#{key}", date: "#{date}"}
   end
 
   def decrypt(message, key = @key, date = @date)
