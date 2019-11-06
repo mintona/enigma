@@ -6,36 +6,27 @@ require_relative '../lib/shift'
 class ShiftTest < Minitest::Test
 
   def setup
-    key = "02715"
-    date = "040895"
-    @shift = Shift.new(key, date)
+    @key = "02715"
+    @date = "040895"
   end
 
   def test_it_exists
-    shift = Shift.new("12345", "021119")
+    shift = Shift.new
     assert_instance_of Shift, shift
   end
 
-  def test_it_has_attributes
-    assert_equal "02715", @shift.key
-    assert_equal "040895", @shift.date
-    assert_nil @shift.a_shift
-    assert_nil @shift.b_shift
-    assert_nil @shift.c_shift
-    assert_nil @shift.d_shift
+  def test_it_can_create_offset
+    assert_equal "1025", Shift.create_offset(@date)
   end
 
-  def test_it_can_create_offset
-    assert_equal "1025", @shift.create_offset
+  def test_it_can_split_key
+    expected = [2, 27, 71, 15]
+    assert_equal expected, Shift.split_key(@key)
   end
 
   def test_it_can_create_shift
+    expected = [3, 27, 73, 20]
 
-    @shift.create_shift
-    assert_equal 3, @shift.a_shift
-    assert_equal 27, @shift.b_shift
-    assert_equal 73, @shift.c_shift
-    assert_equal 20, @shift.d_shift
+    assert_equal expected, Shift.create_shift(@key, @date)
   end
-
 end
