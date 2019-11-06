@@ -31,25 +31,25 @@ class EnigmaTest < Minitest::Test
 
     assert_equal '12345', enigma.key
     assert_equal '021119', enigma.date
-    assert_equal ({}), enigma.shift
+    assert_equal [], enigma.shift
   end
 
   def test_it_can_populate_shift_with_key_and_date
     @enigma.populate_shift("02715", "040895")
 
-    assert_equal 3, @enigma.shift[:a_shift]
-    assert_equal 27, @enigma.shift[:b_shift]
-    assert_equal 73, @enigma.shift[:c_shift]
-    assert_equal 20, @enigma.shift[:d_shift]
+    assert_equal 3, @enigma.shift[0]
+    assert_equal 27, @enigma.shift[1]
+    assert_equal 73, @enigma.shift[2]
+    assert_equal 20, @enigma.shift[3]
   end
 
   def test_it_can_popluate_shift_with_key_only
     @enigma.populate_shift("02715")
 
-    assert_equal 4, @enigma.shift[:a_shift]
-    assert_equal 28, @enigma.shift[:b_shift]
-    assert_equal 77, @enigma.shift[:c_shift]
-    assert_equal 16, @enigma.shift[:d_shift]
+    assert_equal 4, @enigma.shift[0]
+    assert_equal 28, @enigma.shift[1]
+    assert_equal 77, @enigma.shift[2]
+    assert_equal 16, @enigma.shift[3]
   end
 
   def test_it_can_create_shift_without_key_or_date
@@ -58,19 +58,19 @@ class EnigmaTest < Minitest::Test
     assert_equal "12345", @enigma.key
     assert_equal "021119", @enigma.date
 
-    assert_equal 14, @enigma.shift[:a_shift]
-    assert_equal 24, @enigma.shift[:b_shift]
-    assert_equal 40, @enigma.shift[:c_shift]
-    assert_equal 46, @enigma.shift[:d_shift]
+    assert_equal 14, @enigma.shift[0]
+    assert_equal 24, @enigma.shift[1]
+    assert_equal 40, @enigma.shift[2]
+    assert_equal 46, @enigma.shift[3]
   end
 
   def test_it_can_determine_shift_amount_by_character
     @enigma.populate_shift("02715", "040895")
 
-    assert_equal @enigma.shift[:a_shift], @enigma.determine_shift_amount(0)
-    assert_equal @enigma.shift[:b_shift], @enigma.determine_shift_amount(1)
-    assert_equal @enigma.shift[:c_shift], @enigma.determine_shift_amount(2)
-    assert_equal @enigma.shift[:d_shift], @enigma.determine_shift_amount(3)
+    assert_equal @enigma.shift[0], @enigma.determine_shift_amount(0)
+    assert_equal @enigma.shift[1], @enigma.determine_shift_amount(1)
+    assert_equal @enigma.shift[2], @enigma.determine_shift_amount(2)
+    assert_equal @enigma.shift[3], @enigma.determine_shift_amount(3)
   end
 
   def test_it_can_determine_if_character_is_in_alphabet

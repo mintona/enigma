@@ -7,7 +7,7 @@ class Enigma
     @alphabet = ("a".."z").to_a << " "
     @key = Key.generate_number
     @date = Offset.generate_date
-    @shift = Hash.new(0)
+    @shift = []
   end
 
   def populate_shift(key = @key, date = @date)
@@ -15,10 +15,10 @@ class Enigma
   end
 
   def determine_shift_amount(index)
-    return @shift[:a_shift] if index % 4 == 0
-    return @shift[:b_shift] if index % 4 == 1
-    return @shift[:c_shift] if index % 4 == 2
-    return @shift[:d_shift] if index % 4 == 3
+    return @shift[0] if index % 4 == 0
+    return @shift[1] if index % 4 == 1
+    return @shift[2] if index % 4 == 2
+    return @shift[3] if index % 4 == 3
   end
 
   def in_alphabet?(character)
